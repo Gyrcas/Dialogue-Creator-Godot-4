@@ -1,0 +1,52 @@
+[gd_scene load_steps=3 format=3 uid="uid://coqt2ks3sv608"]
+
+[ext_resource type="Script" path="res://addons/DialogueCreator/DialoguePlayer.gd" id="1_weacf"]
+
+[sub_resource type="GDScript" id="GDScript_pv4m2"]
+script/source = "extends Control
+
+
+func _ready():
+	$DialoguePlayer.play_from_file(\"res://demo/dialogue.txt\")
+"
+
+[node name="main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_pv4m2")
+
+[node name="background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="text" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 373.0
+grow_horizontal = 2
+
+[node name="buttons" type="GridContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -286.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="DialoguePlayer" type="Node" parent="." node_paths=PackedStringArray("button_container", "text_node")]
+script = ExtResource("1_weacf")
+button_container = NodePath("../buttons")
+text_node = NodePath("../text")
+typewritter_speed = 0.01

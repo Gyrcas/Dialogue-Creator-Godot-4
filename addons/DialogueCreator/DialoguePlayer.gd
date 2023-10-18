@@ -60,6 +60,7 @@ func play(dialogue : Dictionary, current_dialogue : Dictionary = dialogue) -> vo
 			var split : PackedStringArray = current_dialogue.content.split("?")
 			var node : Node = Node.new()
 			node.set_script(load(split[0]))
+			add_child(node)
 			node.call(split[1])
 			node.queue_free()
 			if current_dialogue.children.size() > 0:
@@ -78,6 +79,7 @@ func play(dialogue : Dictionary, current_dialogue : Dictionary = dialogue) -> vo
 			var split : PackedStringArray = current_dialogue.content.split("?")
 			var node : Node = Node.new()
 			node.set_script(load(split[0]))
+			add_child(node)
 			var result : bool = node.call(split[1])
 			node.queue_free()
 			play(dialogue,current_dialogue.children[0] if result else current_dialogue.children[1])
