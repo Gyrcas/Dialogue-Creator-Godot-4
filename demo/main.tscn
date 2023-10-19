@@ -28,12 +28,13 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="text" type="Label" parent="."]
+[node name="text" type="RichTextLabel" parent="."]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 373.0
 grow_horizontal = 2
+bbcode_enabled = true
 
 [node name="buttons" type="GridContainer" parent="."]
 layout_mode = 1

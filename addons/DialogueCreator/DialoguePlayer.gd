@@ -119,7 +119,7 @@ func search_bbcode(source : String) -> Dictionary:
 	return {"string":regex.sub(source,"",true),"bbcodes":bbcodes}
 
 func on_typewritter(string : String, nb_char : int, bbcodes : Variant = null) -> void:
-	var display_str : String = string.substr(0,nb_char)
+	var display_str : String = string.substr(0,nb_char) if writing else string
 	for bbcode in bbcodes:
 		if bbcode.idx <= display_str.length():
 			display_str = display_str.insert(bbcode.idx,bbcode.tag)

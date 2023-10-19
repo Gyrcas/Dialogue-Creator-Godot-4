@@ -6,6 +6,8 @@ extends VBoxContainer
 
 @onready var text : TextEdit = $text
 
+const max_retry : int = 5
+
 func _on_add_pressed() -> void:
 	var box : DialogueBox = get_node(\"../../\")
 	box.add_child_box(box.types.choice_option)
@@ -13,10 +15,18 @@ func _on_add_pressed() -> void:
 func _on_text_text_changed() -> void:
 	get_node(\"../../\").content = text.text
 
-func _process(_delta) -> void:
-	if not get_node(\"../../\") is DialogueBox || text.text == get_node(\"../../\").content:
-		return
-	text.text = get_node(\"../../\").content
+func set_content(retry : int = 0) -> void:
+	retry += 1
+	if retry < max_retry:
+		if not get_node(\"../../\") is DialogueBox || !text:
+			set_content.call_deferred(retry)
+			return
+		if get_node(\"../../\").content == \"\" || text.text != get_node(\"../../\").content:
+			if get_tree():
+				await get_tree().create_timer(0.1).timeout
+			text.text = get_node(\"../../\").content
+			set_content.call_deferred(retry)
+	
 "
 
 [node name="choice" type="VBoxContainer"]

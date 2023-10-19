@@ -81,7 +81,7 @@ func load_save(box_data : Dictionary, parent : DialogueBox = null) -> DialogueBo
 	var box : DialogueBox = preload("res://addons/DialogueCreator/box.tscn").instantiate()
 	box.id = box_data.id
 	nodes.add_child(box)
-	box.set_content(box_data.content)
+	(func():box.content = box_data.content).call_deferred()
 	if parent:
 		box.parent = parent
 	if box_data.keys().has("position"):
@@ -111,7 +111,6 @@ func save(box : DialogueBox, blueprint : bool = false) -> Dictionary:
 
 func _on_file_dialog_file_selected(path : String) -> void:
 	if saving:
-		print(used_ids)
 		var save_data : Dictionary
 		for child in nodes.get_children():
 			if child.id == 0:
