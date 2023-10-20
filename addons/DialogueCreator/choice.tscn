@@ -21,13 +21,15 @@ func _on_text_text_changed() -> void:
 func set_content(retry : int = 0) -> void:
 	retry += 1
 	if retry < max_retry:
-		if not get_node(\"../../\") is DialogueBox || !text:
+		var parent : Node = get_node(\"../../\")
+		if not parent is DialogueBox || !text:
 			set_content.call_deferred(retry)
 			return
-		if get_node(\"../../\").content == \"\" || text.text != get_node(\"../../\").content:
+		if parent.content == \"\" || text.text != parent.content || parent.zoom == 1 || parent.zoom != zoom:
 			if get_tree():
 				await get_tree().create_timer(0.1).timeout
-			text.text = get_node(\"../../\").content
+			text.text = parent.content
+			zoom = parent.zoom
 			set_content.call_deferred(retry)
 
 func _input(event : InputEvent):
@@ -39,7 +41,8 @@ func _input(event : InputEvent):
 			45:
 				zoom = zoom - 0.05 if zoom > 1 else 1
 				text.custom_minimum_size = default_size * zoom
-
+		if get_node(\"../../\") is DialogueBox:
+			get_node(\"../../\").zoom = zoom
 
 func _on_text_focus_entered() -> void:
 	text.custom_minimum_size = default_size * zoom

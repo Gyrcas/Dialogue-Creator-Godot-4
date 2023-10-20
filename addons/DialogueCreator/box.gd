@@ -114,6 +114,8 @@ func default_children_method() -> void:
 		#Transform the choice option into msg if choice option
 		children[0]._on_type_item_selected(types.msg)
 
+var zoom : float = 1
+
 func _on_type_item_selected(idx : int) -> void:
 	if !types.values().has(idx):
 		push_error("Non existing type")

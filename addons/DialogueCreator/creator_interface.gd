@@ -12,6 +12,8 @@ var export : bool = false
 
 var saving : bool = false
 
+var zoom : float = 1
+
 func _draw() -> void:
 	var biggest : Vector2 = global_position
 	var lines : PackedVector2Array = []
@@ -81,7 +83,11 @@ func load_save(box_data : Dictionary, parent : DialogueBox = null) -> DialogueBo
 	var box : DialogueBox = preload("res://addons/DialogueCreator/box.tscn").instantiate()
 	box.id = box_data.id
 	nodes.add_child(box)
-	(func():box.content = box_data.content).call_deferred()
+	(func():
+		box.content = box_data.content 
+		if box_data.keys().has("zoom"):
+			box.zoom = box_data.zoom
+	).call_deferred()
 	if parent:
 		box.parent = parent
 	if box_data.keys().has("position"):
@@ -102,6 +108,7 @@ func save(box : DialogueBox, blueprint : bool = false) -> Dictionary:
 	save.content = box.content
 	if blueprint:
 		save.position = [box.global_position.x,box.global_position.y]
+		save.zoom = box.zoom
 	save.children = []
 	for child in box.children:
 		if export && child.type_select.selected == child.types.placeholder:
