@@ -92,6 +92,8 @@ func _ready() -> void:
 		
 
 func add_child_box(type : int = types.placeholder,offset : Vector2 = Vector2.ZERO) -> void:
+	if not get_parent() is Control:
+		return
 	var placeholder : DialogueBox  = load("res://addons/DialogueCreator/box.tscn").instantiate()
 	children.append(placeholder)
 	placeholder.parent = self

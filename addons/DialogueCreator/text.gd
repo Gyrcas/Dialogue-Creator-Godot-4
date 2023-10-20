@@ -3,6 +3,10 @@ extends TextEdit
 
 const max_retry : int = 5
 
+var default_size : Vector2 = size
+var zoom : float = 1
+var focused : bool = false
+
 func _ready() -> void:
 	connect("text_changed",_on_text_changed)
 
@@ -19,4 +23,24 @@ func set_content(retry : int = 0) -> void:
 			await get_tree().create_timer(0.1).timeout
 		text = get_node("../../").content
 		set_content.call_deferred(retry)
-	
+
+func _input(event : InputEvent):
+	if focused && event is InputEventKey && event.is_pressed():
+		match event.keycode:
+			61:
+				zoom += 0.05
+				size = default_size * zoom
+			45:
+				zoom -= 0.05
+				size = default_size * zoom
+
+func _on_focus_entered() -> void:
+	size = default_size * zoom
+	z_index = 100
+	focused = true
+
+
+func _on_focus_exited() -> void:
+	size = default_size
+	z_index = 0
+	focused = false

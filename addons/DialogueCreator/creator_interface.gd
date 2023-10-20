@@ -109,6 +109,24 @@ func save(box : DialogueBox, blueprint : bool = false) -> Dictionary:
 		save.children.append(save(child,blueprint))
 	return save
 
+func _ready() -> void:
+	get_viewport().connect("gui_focus_changed", _on_focus_changed)
+
+var writing : bool = false
+var focused : Node
+
+func _input(event : InputEvent) -> void:
+	if focused == scroll && event is InputEventKey:
+		match event.keycode:
+			61: #zoom
+				pass
+			45: #unzoom
+				pass
+
+func _on_focus_changed(node : Control) -> void:
+	writing = node is TextEdit
+	focused = node
+
 func _on_file_dialog_file_selected(path : String) -> void:
 	if saving:
 		var save_data : Dictionary
