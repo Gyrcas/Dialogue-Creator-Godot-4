@@ -29,11 +29,11 @@ func set_content(retry : int = 0) -> void:
 
 func _input(event : InputEvent):
 	if focused && event is InputEventKey && event.is_pressed():
-		match event.keycode:
-			61:
+		match event.as_text():
+			"Ctrl+Equal":
 				zoom += 0.05
 				size = default_size * zoom
-			45:
+			"Ctrl+Minus":
 				zoom = zoom - 0.05 if zoom > 1 else 1
 				size = default_size * zoom
 		if get_node("../../") is DialogueBox:

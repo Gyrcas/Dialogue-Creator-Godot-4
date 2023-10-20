@@ -98,7 +98,7 @@ func add_child_box(type : int = types.placeholder,offset : Vector2 = Vector2.ZER
 	children.append(placeholder)
 	placeholder.parent = self
 	get_parent().add_child(placeholder)
-	placeholder.global_position = global_position + Vector2(500,0) + offset
+	placeholder.global_position = global_position + Vector2(275,0) * interface.zoom + offset
 	placeholder._on_type_item_selected(type)
 
 # Remove all children except one and add a placeholder if no children

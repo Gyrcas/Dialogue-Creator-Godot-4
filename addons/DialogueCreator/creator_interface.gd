@@ -19,7 +19,7 @@ func _draw() -> void:
 	var lines : PackedVector2Array = []
 	for child in nodes.get_children():
 		if child.parent:
-			lines.append_array([child.global_position - global_position + Vector2(125,125), child.parent.global_position - global_position + Vector2(125,125)])
+			lines.append_array([child.global_position - global_position + Vector2(125,125) * zoom, child.parent.global_position - global_position + Vector2(125,125) * zoom])
 			if child.global_position.x > biggest.x:
 				biggest.x = child.global_position.x
 			if child.global_position.y > biggest.y:
@@ -28,10 +28,11 @@ func _draw() -> void:
 		draw_multiline(lines,Color(0,0,0),2.5)
 	if biggest == Vector2.ZERO:
 		return
-	nodes.custom_minimum_size = biggest * 1000
+	nodes.scale = Vector2(zoom,zoom)
+	nodes.get_parent().custom_minimum_size = biggest * 1000 * zoom
 
 @onready var scroll : ScrollContainer = $scroll
-@onready var nodes : Control = $scroll/nodes
+@onready var nodes : Control = $scroll/nodes/nodes
 
 func get_first_available_id() -> int:
 	var i : int = 0
@@ -123,12 +124,12 @@ var writing : bool = false
 var focused : Node
 
 func _input(event : InputEvent) -> void:
-	if focused == scroll && event is InputEventKey:
-		match event.keycode:
-			61: #zoom
-				pass
-			45: #unzoom
-				pass
+	if focused == scroll && event is InputEventKey && event.is_pressed():
+		match event.as_text():
+			"Ctrl+Equal": #zoom
+				zoom += 0.05
+			"Ctrl+Minus": #unzoom
+				zoom -= 0.05
 
 func _on_focus_changed(node : Control) -> void:
 	writing = node is TextEdit
