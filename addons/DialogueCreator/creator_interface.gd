@@ -74,8 +74,7 @@ func _on_new_pressed() -> void:
 	used_ids = []
 	for child in nodes.get_children():
 		child.queue_free()
-	if nodes.get_child_count() == 0:
-		nodes.add_child.call_deferred(preload("res://addons/DialogueCreator/box.tscn").instantiate())
+	nodes.add_child.call_deferred(preload("res://addons/DialogueCreator/box.tscn").instantiate())
 
 func load_save(box_data : Dictionary, parent : DialogueBox = null) -> DialogueBox:
 	if !parent:
@@ -117,23 +116,13 @@ func save(box : DialogueBox, blueprint : bool = false) -> Dictionary:
 		save.children.append(save(child,blueprint))
 	return save
 
-func _ready() -> void:
-	get_viewport().connect("gui_focus_changed", _on_focus_changed)
-
-var writing : bool = false
-var focused : Node
-
 func _input(event : InputEvent) -> void:
-	if focused == scroll && event is InputEventKey && event.is_pressed():
+	if not get_viewport().gui_get_focus_owner() is TextEdit && event is InputEventKey && event.is_pressed():
 		match event.as_text():
 			"Ctrl+Equal": #zoom
 				zoom += 0.05
 			"Ctrl+Minus": #unzoom
 				zoom -= 0.05
-
-func _on_focus_changed(node : Control) -> void:
-	writing = node is TextEdit
-	focused = node
 
 func _on_file_dialog_file_selected(path : String) -> void:
 	if saving:
