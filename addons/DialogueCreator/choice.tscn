@@ -7,7 +7,7 @@ extends VBoxContainer
 @onready var text : TextEdit = $text
 
 const max_retry : int = 5
-var default_size : Vector2 = size
+@onready var default_size : Vector2 = text.custom_minimum_size
 var focused : bool = false
 var zoom : float = 1
 
@@ -35,20 +35,20 @@ func _input(event : InputEvent):
 		match event.keycode:
 			61:
 				zoom += 0.05
-				text.size = default_size * zoom
+				text.custom_minimum_size = default_size * zoom
 			45:
-				zoom -= 0.05
-				text.size = default_size * zoom
+				zoom = zoom - 0.05 if zoom > 1 else 1
+				text.custom_minimum_size = default_size * zoom
 
 
 func _on_text_focus_entered() -> void:
-	text.size = default_size * zoom
+	text.custom_minimum_size = default_size * zoom
 	z_index = 100
 	focused = true
 
 
 func _on_text_focus_exited() -> void:
-	text.size = default_size
+	text.custom_minimum_size = default_size
 	z_index = 0
 	focused = false
 "

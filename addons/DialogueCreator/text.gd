@@ -31,7 +31,7 @@ func _input(event : InputEvent):
 				zoom += 0.05
 				size = default_size * zoom
 			45:
-				zoom -= 0.05
+				zoom = zoom - 0.05 if zoom > 1 else 1
 				size = default_size * zoom
 
 func _on_focus_entered() -> void:
