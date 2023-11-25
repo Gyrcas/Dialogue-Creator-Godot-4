@@ -13,6 +13,8 @@ func _ready() -> void:
 func _on_text_changed() -> void:
 	get_node("../../").content = text
 
+#Function to try and set content. Will retry until it get the right value or as reached max 
+#number of try
 func set_content(retry : int = 0) -> void:
 	retry += 1
 	if retry < max_retry:
@@ -25,6 +27,7 @@ func set_content(retry : int = 0) -> void:
 				await get_tree().create_timer(0.1).timeout
 			text = parent.content
 			zoom = parent.zoom
+			focused = false
 			set_content.call_deferred(retry)
 
 func _input(event : InputEvent):
@@ -39,10 +42,11 @@ func _input(event : InputEvent):
 		if get_node("../../") is DialogueBox:
 			get_node("../../").zoom = zoom
 
-func _on_focus_entered() -> void:
-	size = default_size * zoom
-	z_index = 100
-	focused = true
+func _gui_input(event : InputEvent) -> void:
+	if event.as_text() == "Left Mouse Button":
+		size = default_size * zoom
+		z_index = 100
+		focused = true
 
 
 func _on_focus_exited() -> void:
